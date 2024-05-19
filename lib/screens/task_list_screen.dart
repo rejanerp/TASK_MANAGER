@@ -51,18 +51,18 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gerenciador de tarefas.'),
+        title: const Text('Gerenciador de Tarefas'),
       ),
       body: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           final task = tasks[index];
-          String convertedDateTime = "Dia ${task.dateTime.day.toString()}/${task.dateTime.month.toString()}/${task.dateTime.year.toString()} Hora ${task.dateTime.hour.toString()}:${task.dateTime.minute.toString()} ";
-          String geoLocalizacao = "Localização '${task.latitude}- ${task.longitude}'";
-          String texto = convertedDateTime + geoLocalizacao;
+          String convertedDateTime = "Dia ${task.dateTime.day}/${task.dateTime.month}/${task.dateTime.year} Hora ${task.dateTime.hour}:${task.dateTime.minute}";
+          String locationInfo = task.location.isNotEmpty ? task.location : "Localização: ${task.latitude}, ${task.longitude}";
+          String texto = "$convertedDateTime\n$locationInfo";
           return ListTile(
             title: Text(task.name),
-            subtitle: Text(texto) , //Text('${task.dateTime} - ${task.latitude}, ${task.longitude}'),
+            subtitle: Text(texto),
             onTap: () => _navigateToForm(context, task, index),
             trailing: IconButton(
               icon: Icon(Icons.delete),

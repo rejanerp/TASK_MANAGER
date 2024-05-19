@@ -12,7 +12,7 @@ class TaskManagerApp extends StatelessWidget {
       title: 'Task Manager',
       theme: ThemeData(
         primarySwatch: Colors.pink, // Define a cor primária para o aplicativo
-        scaffoldBackgroundColor: Color.fromARGB(255, 246, 171, 196)
+        scaffoldBackgroundColor: Color.fromARGB(255, 246, 171, 196),
       ),
       home: TaskListScreen(),
     );

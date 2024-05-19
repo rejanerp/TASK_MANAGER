@@ -18,7 +18,9 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   late DateTime _dateTime;
   late double _latitude;
   late double _longitude;
-  late String _location = "Localização não disponível";
+  String _location = "";  // Inicializar como string vazia
+
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   void initState() {
@@ -28,6 +30,8 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
       _dateTime = widget.task!.dateTime;
       _latitude = widget.task!.latitude;
       _longitude = widget.task!.longitude;
+      _location = widget.task!.location;
+      _locationController.text = _location;
     } else {
       _name = '';
       _dateTime = DateTime.now();
@@ -87,15 +91,18 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         Placemark place = placemarks[0];
         setState(() {
           _location = "${place.locality}, ${place.administrativeArea}, ${place.country}";
+          _locationController.text = _location;
         });
       } else {
         setState(() {
           _location = "Localização não encontrada";
+          _locationController.text = _location;
         });
       }
     } catch (e) {
       setState(() {
         _location = "Erro ao obter localização";
+        _locationController.text = _location;
       });
       print(e);
     }
@@ -109,6 +116,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         dateTime: _dateTime,
         latitude: _latitude,
         longitude: _longitude,
+        location: _location,  // Salva a localização manual ou capturada
       );
       Navigator.of(context).pop(task);
     }
@@ -140,7 +148,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               TextFormField(
-                initialValue: '' ,//_dateTime.toString(),
+                initialValue: _dateTime.toString(),
                 decoration: const InputDecoration(labelText: 'Data e Hora'),
                 readOnly: true,
                 onTap: () async {
@@ -165,27 +173,29 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                           selectedDate.day,
                           selectedTime.hour,
                           selectedTime.minute,
-                          
-                          
                         );
                       });
                     }
                   }
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(labelText: 'Localização (Cidade, País)'),
+                onSaved: (value) {
+                  _location = value!;
+                },
+              ),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _getCurrentLocation,
-                child: Text('Capturar localização atual'),
+                child: const Text('Capturar localização atual'),
               ),
-              SizedBox(height: 16.0),
-              Text('Latitude: $_latitude'),
-              Text('Longitude: $_longitude'),
-              Text('Localização: $_location'),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _submit,
-                child: Text('Salvar Tarefa'),
+                child: const Text('Salvar Tarefa'),
               ),
             ],
           ),
